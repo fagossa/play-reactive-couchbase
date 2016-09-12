@@ -7,7 +7,7 @@ Modify the data in application.conf
 couchbase {
   buckets = [
     {
-      host = "192.168.99.100"
+      host = "127.0.0.1"
       port = "8091"
       base = "pools"
       bucket = "default"
