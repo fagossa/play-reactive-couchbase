@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Play Framework 2.5 with Couchbase - Activator template</title>
+</head>
+<body>
+
+<div>
+    <p></p>
+
+    <h2>Quick Overview</h2>
+
+    <p>
+        This project shows how to use the dependency injection mechanism in Play2.5 to communicate with a Couchbase Db.
+    </p>
+
+
+    <h2>Running</h2>
+    <p>
+    <ul>
+        <li>&gt; sbt compile</li>
+        <li>&gt; sbt test</li>
+        <li>&gt; sbt run</li>
+    </ul>
+    </p>
+
+    <p>
+        Once the application has been compiled and the server started, your application can be accessed at: <a
+            href="http://localhost:9000" target="_blank">http://localhost:9000</a>.
+    </p>
+
+    <h2>Project Structure</h2>
+
+    <p>
+        The inventory of all available routes is available at <a href="#code/conf/routes" class="shortcut">routes</a>.
+    </p>
+
+    <p>
+        The project consist of the following main classes:
+    <ul>
+        <li><b>FilmController</b>, Rest endpoint</li>
+        <li><b>Film</b>, case class to be persisted</li>
+        <li><b>FilmRepository</b>, façade for all communication with couchbase</li>
+        <li><b>CouchbaseBuckets</b>, wrapper for all buckets</li>
+    </ul>
+    </p>
+
+
+</div>
+
+</body>
+</html>
