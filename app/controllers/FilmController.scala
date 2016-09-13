@@ -19,10 +19,10 @@ class FilmController @Inject()(filmRepository: FilmRepository)(implicit exec: Ex
           Logger.info("Successfully created a film")
           Created(Json.toJson(f))
         }
-        .recoverWith {
+        .recover {
           case e: Throwable =>
             Logger.error("Error creating film", e)
-            Future.successful(BadRequest("Error creating film"))
+            InternalServerError("Error creating film")
         }
     }.recoverTotal { e =>
       Logger.warn(s"Unable to create a film: ${JsError.toJson(e)}")
@@ -38,7 +38,7 @@ class FilmController @Inject()(filmRepository: FilmRepository)(implicit exec: Ex
     }.recover {
       case e: Throwable =>
         Logger.error(s"Error finding film using isbn: $isbn", e)
-        BadRequest("Error finding films")
+        InternalServerError("Error finding films")
     }
   }
 
