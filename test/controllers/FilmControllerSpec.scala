@@ -2,7 +2,7 @@ package controllers
 
 import controllers.FilmControllerSpec.TestableFilmBucket
 import models.TestBuilder._
-import models.film.Film
+import models.film.{Film, FilmDbKey}
 import org.mockito.Mockito._
 import org.reactivecouchbase.CouchbaseBucket
 import org.scalatest.concurrent.ScalaFutures
@@ -19,22 +19,33 @@ class FilmControllerSpec extends PlaySpec with OneAppPerTestWithOverrides
   implicit lazy val ec = app.materializer.executionContext
 
   import controllers.FilmControllerSpec.TestableFilmBucket._
+
   "a Film controller" should {
 
     "get existing films" in {
       // Given
-      val anIsbn = "12345"
+      val anExistingIsbn = "12345"
       // When
-      val response = anUser.GET(routes.FilmController.findFilmBy(anIsbn)).value
+      val response = anUser.GET(routes.FilmController.findFilmBy(anExistingIsbn)).value
       // Then
       status(response) must be(OK)
       contentAsJson(response).as[Film] mustBe existingFilms.head
+    }
+
+    "detect non existing films" in {
+      // Given
+      val anUnknownIsbn = "xxxx"
+      // When
+      val response = anUser.GET(routes.FilmController.findFilmBy(anUnknownIsbn)).value
+      // Then
+      status(response) must be(NOT_FOUND)
     }
 
   }
 
   // This is where you replace the real bucketWrapper with the mocked one
   import play.api.inject.bind
+
   override def overrideModules = Seq(
     bind[CouchbaseBuckets].to[TestableFilmBucket.type]
   )
@@ -43,6 +54,7 @@ class FilmControllerSpec extends PlaySpec with OneAppPerTestWithOverrides
 
 object FilmControllerSpec {
 
+  import org.mockito.Matchers.{anyObject, anyString}
   import play.api.inject.ApplicationLifecycle
 
   object MockedApplicationLifecycle extends ApplicationLifecycle {
@@ -55,13 +67,18 @@ object FilmControllerSpec {
 
     implicit val ec = defaultExecutionContext
 
+    // by default all films are rejected
+    when(defaultBucket.get[Film](anyString())(anyObject(), anyObject()))
+      .thenReturn(Future.successful(None))
+
+    // we have a list of existing films
     val existingFilms = List(
       Film("12345", "Jurassick Park", 1993)
     )
 
     // prepares the mocked object to handle data
     existingFilms.foreach { film =>
-      when[Future[Option[Film]]](defaultBucket.get[Film](s"film::${film.isbn}"))
+      when(defaultBucket.get[Film](FilmDbKey(film.isbn)))
         .thenReturn(Future.successful(Some(film)))
     }
 

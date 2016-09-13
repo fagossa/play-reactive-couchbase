@@ -13,7 +13,7 @@ class FilmRepository @Inject()(wrapper: CouchbaseBuckets) {
   // Upsert a film in db using default writer from companion object
   def create(film: Film): Future[Film] =
     wrapper.defaultBucket
-      .set(s"film::${film.isbn}", film)
+      .set(FilmDbKey(film.isbn), film)
       .flatMap { result =>
         if (result.isSuccess) {
           Future.successful(film)
@@ -25,6 +25,6 @@ class FilmRepository @Inject()(wrapper: CouchbaseBuckets) {
   // Get a film from the db using default reader from companion object
   def get(isbn: String): Future[Option[Film]] =
     wrapper.defaultBucket
-      .get[Film](s"film::$isbn")
+      .get[Film](FilmDbKey(isbn))
 
 }

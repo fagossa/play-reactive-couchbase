@@ -10,6 +10,7 @@
 
     <logger name="play" level="INFO" />
     <logger name="application" level="DEBUG" />
+    <logger name="ch.qos.logback" level="INFO" />
 
     <root level="ERROR">
         <appender-ref ref="STDOUT" />
