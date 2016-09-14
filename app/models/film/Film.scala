@@ -9,6 +9,5 @@ object FilmDbKey {
 case class Film(isbn: String, name: String, release: Int)
 
 object Film {
-  implicit val defaultReads = Json.reads[Film]
-  implicit val defaultWrites = Json.writes[Film]
+  implicit val defaultFormat = Json.format[Film]
 }
