@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/fagossa/play-reactive-couchbase.svg?branch=master)](https://travis-ci.org/fagossa/play-reactive-couchbase)
+
 # Example application using play 2.5 and reactive couchbase
 
 # Configure Couchbase
