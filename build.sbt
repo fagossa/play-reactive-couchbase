@@ -12,7 +12,6 @@ resolvers += "ReactiveCouchbase Releases" at "https://raw.github.com/ReactiveCou
 
 libraryDependencies ++= Seq(
   "org.reactivecouchbase" %% "reactivecouchbase-core" % "0.3",
-  "org.reactivecouchbase" %% "reactivecouchbase-play" % "0.3",
   "org.scalatestplus.play" %% "scalatestplus-play" % "1.5.0" % "test" withSources(),
   "org.scalaz" %% "scalaz-core" % "7.2.6",
   "org.mockito" % "mockito-core" % "1.10.19"
