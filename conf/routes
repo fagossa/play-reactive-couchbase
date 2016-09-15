@@ -1,5 +1,5 @@
 
 POST    /film               controllers.FilmController.createFilm
-GET     /film               controllers.FilmController.findFilmBy(isbn: String)
+GET     /film/:isbn         controllers.FilmController.findFilmBy(isbn: models.film.Isbn)
 
 

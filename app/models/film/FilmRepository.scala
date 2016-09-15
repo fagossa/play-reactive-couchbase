@@ -23,7 +23,7 @@ class FilmRepository @Inject()(wrapper: CouchbaseBuckets) {
       }
 
   // Get a film from the db using default reader from companion object
-  def get(isbn: String): Future[Option[Film]] =
+  def get(isbn: Isbn): Future[Option[Film]] =
     wrapper.defaultBucket
       .get[Film](FilmDbKey(isbn))
 

@@ -2,7 +2,7 @@ package controllers
 
 import javax.inject._
 
-import models.film.{Film, FilmRepository}
+import models.film.{Film, FilmRepository, Isbn}
 import play.api.Logger
 import play.api.libs.json._
 import play.api.mvc._
@@ -30,11 +30,11 @@ class FilmController @Inject()(filmRepository: FilmRepository)(implicit exec: Ex
     }
   }
 
-  def findFilmBy(isbn: String) = Action.async { implicit request =>
+  def findFilmBy(isbn: Isbn) = Action.async { implicit request =>
     filmRepository.get(isbn).map { maybeFilm =>
       maybeFilm
         .map(f => Ok(Json.toJson(f)))
-        .getOrElse(NotFound(isbn))
+        .getOrElse(NotFound(isbn.value))
     }.recover {
       case e: Throwable =>
         Logger.error(s"Error finding film using isbn: $isbn", e)

@@ -2,7 +2,7 @@ package controllers
 
 import controllers.FilmControllerSpec.TestableFilmBucket
 import models.TestBuilder._
-import models.film.{Film, FilmDbKey}
+import models.film.{Film, FilmDbKey, Isbn}
 import org.mockito.Mockito._
 import org.reactivecouchbase.CouchbaseBucket
 import org.scalatest.concurrent.ScalaFutures
@@ -24,7 +24,7 @@ class FilmControllerSpec extends PlaySpec with OneAppPerTestWithOverrides
 
     "get existing films" in {
       // Given
-      val anExistingIsbn = "12345"
+      val anExistingIsbn = Isbn("12345")
       // When
       val response = anUser.GET(routes.FilmController.findFilmBy(anExistingIsbn)).value
       // Then
@@ -34,7 +34,7 @@ class FilmControllerSpec extends PlaySpec with OneAppPerTestWithOverrides
 
     "detect non existing films" in {
       // Given
-      val anUnknownIsbn = "xxxx"
+      val anUnknownIsbn = Isbn("xxxx")
       // When
       val response = anUser.GET(routes.FilmController.findFilmBy(anUnknownIsbn)).value
       // Then
@@ -73,7 +73,7 @@ object FilmControllerSpec {
 
     // we have a list of existing films
     val existingFilms = List(
-      Film("12345", "Jurassick Park", 1993)
+      Film(Isbn("12345"), "Jurassic Park", 1993)
     )
 
     // prepares the mocked object to handle data
