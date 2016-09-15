@@ -26,7 +26,7 @@ class FilmController @Inject()(filmRepository: FilmRepository)(implicit exec: Ex
         }
     }.recoverTotal { e =>
       Logger.warn(s"Unable to create a film: ${JsError.toJson(e)}")
-      Future.successful(BadRequest(Json.obj("error" -> "unable to create film")))
+      Future.successful(BadRequest(Json.obj("error" -> s"unable to create film. Cause ${e}")))
     }
   }
 

@@ -3,11 +3,14 @@ package controllers
 import controllers.FilmControllerSpec.TestableFilmBucket
 import models.TestBuilder._
 import models.film.{Film, FilmDbKey, Isbn}
+import net.spy.memcached.ops.OperationStatus
 import org.mockito.Mockito._
 import org.reactivecouchbase.CouchbaseBucket
+import org.reactivecouchbase.client.OpResult
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.mock.MockitoSugar
 import org.scalatestplus.play.PlaySpec
+import play.api.libs.json.Json
 import play.api.test.Helpers._
 import util.{CouchbaseBuckets, OneAppPerTestWithOverrides}
 
@@ -21,6 +24,14 @@ class FilmControllerSpec extends PlaySpec with OneAppPerTestWithOverrides
   import controllers.FilmControllerSpec.TestableFilmBucket._
 
   "a Film controller" should {
+
+    "create films" in {
+      val response = anUser.POST(routes.FilmController.createFilm())(Json.parse(
+        """
+          |{"isbn": "tt1139797", "name": "Låt den rätte komma", "release": 2008}
+        """.stripMargin)).value
+      status(response) must be(CREATED)
+    }
 
     "get existing films" in {
       // Given
@@ -61,6 +72,8 @@ object FilmControllerSpec {
     override def addStopHook(hook: () => Future[_]): Unit = {}
   }
 
+  private val successCbResponse = new OpResult(ok = true, None, None, 0, None)
+
   // This singleton instance gets injected into your FilmRepository
   object TestableFilmBucket extends CouchbaseBuckets(MockedApplicationLifecycle) with MockitoSugar {
     override lazy val defaultBucket = mock[CouchbaseBucket]
@@ -70,6 +83,10 @@ object FilmControllerSpec {
     // by default all films are rejected
     when(defaultBucket.get[Film](anyString())(anyObject(), anyObject()))
       .thenReturn(Future.successful(None))
+
+    // by default success response after inserting
+    when(defaultBucket.set[Film](anyString(), anyObject(), anyObject(), anyObject(), anyObject())(anyObject(), anyObject()))
+        .thenReturn(Future.successful(successCbResponse))
 
     // we have a list of existing films
     val existingFilms = List(
