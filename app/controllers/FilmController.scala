@@ -22,23 +22,21 @@ class FilmController @Inject()(filmRepository: FilmRepository)(implicit exec: Ex
         .recover {
           case e: Throwable =>
             Logger.error("Error creating film", e)
-            InternalServerError("Error creating film")
+            InternalServerError(Json.obj("error" -> "Error creating film"))
         }
     }.recoverTotal { e =>
       Logger.warn(s"Unable to create a film: ${JsError.toJson(e)}")
-      Future.successful(BadRequest(Json.obj("messages" -> "unable to create film")))
+      Future.successful(BadRequest(Json.obj("error" -> "unable to create film")))
     }
   }
 
   def findFilmBy(isbn: Isbn) = Action.async { implicit request =>
     filmRepository.get(isbn).map { maybeFilm =>
-      maybeFilm
-        .map(f => Ok(Json.toJson(f)))
-        .getOrElse(NotFound(isbn.value))
+      maybeFilm.fold(NotFound(Json.obj("error" -> s"${isbn.value} not found")))(f => Ok(Json.toJson(f)))
     }.recover {
       case e: Throwable =>
         Logger.error(s"Error finding film using isbn: $isbn", e)
-        InternalServerError("Error finding films")
+        InternalServerError(Json.obj("error" -> "Error finding films"))
     }
   }
 
