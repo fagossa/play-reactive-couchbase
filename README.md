@@ -39,6 +39,6 @@ curl -H "Content-Type: application/json;charset=UTF-8" -X POST -d '{"isbn": "tt1
 ## Search films by a field
 
 ```
-curl http://localhost:9000/film?isbn=tt0470752
+curl http://localhost:9000/film/tt0470752
 ```
 
