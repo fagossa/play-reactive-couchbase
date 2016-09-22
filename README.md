@@ -1,8 +1,8 @@
-[![Build Status](https://travis-ci.org/fagossa/play-reactive-couchbase.svg?branch=master)](https://travis-ci.org/fagossa/play-reactive-couchbase)
 
-# Example application using play 2.5 and reactive couchbase
 
-# Configure Couchbase
+# Example application using play 2.5 and Couchbase [![Build Status](https://travis-ci.org/fagossa/play-reactive-couchbase.svg?branch=master)](https://travis-ci.org/fagossa/play-reactive-couchbase)
+
+# 1. Configure Couchbase
 
 Modify the data in application.conf
 ```
@@ -21,11 +21,18 @@ couchbase {
 }
 ```
 
-# Run it
+# 2. Test your code
 ```
-sbt run
+$ sbt test
 ```
-# Films
+
+
+# 3. Run it
+```
+$ sbt run
+```
+
+# Insert and query some data
 
 Film controller handles film related data using the play-json framework
 
